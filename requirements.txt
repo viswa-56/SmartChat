@@ -1,0 +1,12 @@
+streamlit
+transformers
+sentence-transformers
+beautifulsoup4
+requests
+faiss-cpu
+numpy
+PyPDF2
+python-docx
+python-pptx
+pillow
+pytesseract
