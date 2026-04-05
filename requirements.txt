@@ -1,4 +1,18 @@
-# requirements.txt
+streamlit
+transformers
+sentence-transformers
+beautifulsoup4
+requests
+faiss-cpu
+numpy
+PyPDF2
+python-docx
+python-pptx
+pillow
+pytesseract
+>>>>>>> 2a8e56e63cf9ac20a45f852ab18338b4313f8ef5
+=======
+# requirements.txt (v2 - FastAPI RAG)
 fastapi==0.116.0
 uvicorn==0.35.0
 pydantic==2.11.7
@@ -16,3 +30,24 @@ numpy==2.3.1
 beautifulsoup4==4.13.4
 trafilatura==2.0.0
 lxml==6.0.0
+
+# Legacy (v1 Streamlit - optional)
+# streamlit
+# transformers
+# PyPDF2
+# python-pptx
+
+=======
+streamlit
+transformers
+sentence-transformers
+beautifulsoup4
+requests
+faiss-cpu
+numpy
+PyPDF2
+python-docx
+python-pptx
+pillow
+pytesseract
+>>>>>>> 2a8e56e63cf9ac20a45f852ab18338b4313f8ef5
