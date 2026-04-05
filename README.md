@@ -1,6 +1,5 @@
 # SmartChat
 Summarize and chat with Documents and links
->>>>>>> 2a8e56e63cf9ac20a45f852ab18338b4313f8ef5
 =======
 # Smart Chart V2 🚀 (SmartChat v2)
 
