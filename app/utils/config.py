@@ -5,7 +5,7 @@
 # class Settings(BaseSettings):
 #     # AI Model Configuration
 #     OPENAI_API_KEY: str = ""
-#     HUGGINGFACE_API_KEY: str = "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"
+    HUGGINGFACE_API_KEY: str = ""
     
 #     # Model Selection (Free options)
 #     AI_MODEL: str = "microsoft/DialoGPT-medium"
