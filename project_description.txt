@@ -1,0 +1,178 @@
+# Smart Chart V2 - Chat with Documents & Web
+
+## Project Overview
+Smart Chart V2 is an advanced AI-powered document and web content querying system that enables users to upload various types of documents and website links, then engage in natural language conversations to extract information and insights from their content. The system uses cutting-edge Retrieval-Augmented Generation (RAG) technology to provide accurate, context-aware responses based solely on the uploaded materials.
+
+## Core Functionality
+
+### Document Processing & Upload
+- **Supported File Types**: PDF, DOCX, TXT, images (PNG/JPG/JPEG), Markdown, PowerPoint (PPTX/PPT), HTML files
+- **File Size Limit**: 10MB per file
+- **Document Chunking**: Intelligent text splitting with configurable chunk size (1000 words) and overlap (200 words)
+- **Content Extraction**: Advanced text extraction including OCR for images, table parsing, and structured content handling
+
+### Web Scraping & Processing
+- **Website Link Processing**: Extract clean, readable content from web pages
+- **Content Filtering**: Removes navigation, headers, footers, and scripts for clean text extraction
+- **URL Validation**: Automatic URL cleaning and validation
+- **Content Limits**: 10MB webpage size limit with timeout handling
+
+### AI-Powered Chat Interface
+- **Natural Language Queries**: Ask questions in plain English about uploaded content
+- **Context-Aware Responses**: Answers based only on provided documents and websites
+- **Source Citation**: Every response includes source references with confidence scores
+- **Confidence Scoring**: Numerical confidence ratings for response reliability
+- **Session Management**: Persistent context across conversations
+
+### Technical Architecture
+
+#### Backend (FastAPI)
+- **Framework**: FastAPI with async support for high performance
+- **API Endpoints**:
+  - `/upload`: Document file upload and processing
+  - `/process-link`: Website content scraping and indexing
+  - `/query`: Natural language question answering
+  - `/clear-context`: Remove all indexed content
+  - `/context-stats`: System status and statistics
+  - `/health`: Health check endpoint
+
+#### AI & Machine Learning Components
+- **Embedding Model**: sentence-transformers/all-MiniLM-L6-v2 (384-dimensional vectors)
+- **Vector Database**: FAISS (Facebook AI Similarity Search) for efficient similarity search
+- **LLM Integration**: Together AI API with Meta Llama 3.3 70B Instruct model
+- **RAG Implementation**: Custom retrieval system combining semantic search with generative AI
+
+#### Frontend (HTML/JavaScript)
+- **UI Framework**: Bootstrap 5 with custom styling
+- **Real-time Interface**: Dynamic chat interface with message history
+- **File Upload**: Drag-and-drop support with progress indicators
+- **Status Dashboard**: Real-time system statistics and document counts
+- **Responsive Design**: Mobile-friendly interface
+
+#### Data Processing Pipeline
+1. **Document Upload**: File validation and temporary storage
+2. **Text Extraction**: Format-specific processing (PDF OCR, DOCX parsing, etc.)
+3. **Chunking**: Intelligent text segmentation with overlap
+4. **Embedding Generation**: Convert text chunks to vector representations
+5. **Indexing**: Store vectors in FAISS index with metadata
+6. **Query Processing**: Semantic search for relevant chunks
+7. **Context Assembly**: Combine relevant chunks with source information
+8. **AI Generation**: Generate responses using retrieved context
+
+## Key Features & Capabilities
+
+### Multi-Format Document Support
+- **PDF Processing**: Text extraction with OCR fallback for scanned documents
+- **Office Documents**: DOCX and PowerPoint file parsing with table and slide extraction
+- **Web Content**: HTML parsing with trafilatura for clean article extraction
+- **Images**: OCR text extraction from images using Tesseract
+- **Markdown**: Full markdown parsing with table and code block support
+
+### Advanced RAG System
+- **Semantic Search**: Vector similarity search for relevant content
+- **Context Window Management**: Intelligent context assembly from multiple sources
+- **Source Attribution**: Detailed source information with confidence scores
+- **Content Filtering**: Strict prompt engineering to prevent hallucination
+
+### System Management
+- **Context Clearing**: Complete system reset functionality
+- **Statistics Dashboard**: Real-time metrics on indexed content
+- **Error Handling**: Comprehensive error handling with user-friendly messages
+- **Health Monitoring**: System health checks and status reporting
+
+## Use Cases & Applications
+
+### Business & Professional Use
+- **Research Analysis**: Upload research papers, reports, and analyze content
+- **Contract Review**: Legal document analysis and question answering
+- **Knowledge Base**: Company documentation and policy querying
+- **Educational Content**: Textbook and course material interaction
+
+### Personal & Academic Use
+- **Study Aid**: Upload textbooks, notes, and ask questions
+- **Document Summarization**: Extract key information from long documents
+- **Research Assistance**: Web content analysis and synthesis
+
+### Content Management
+- **Web Scraping**: Extract and query information from websites
+- **Document Digitization**: Convert physical documents to queryable format
+- **Multi-source Analysis**: Combine information from various documents and websites
+
+## Technical Dependencies
+
+### Core Libraries
+- **FastAPI**: Modern Python web framework
+- **Uvicorn**: ASGI server for FastAPI
+- **Sentence Transformers**: Text embedding generation
+- **FAISS**: Vector similarity search
+- **PyMuPDF**: PDF text extraction
+- **python-docx**: Word document processing
+- **Pillow**: Image processing
+- **Tesseract**: OCR functionality
+- **BeautifulSoup4**: HTML parsing
+- **Trafilatura**: Web content extraction
+
+### AI & ML
+- **Together AI API**: Access to Llama 3.3 70B model
+- **Hugging Face**: Model hosting and inference
+- **Transformers**: NLP model integration
+
+### Frontend
+- **Bootstrap 5**: CSS framework
+- **Font Awesome**: Icon library
+- **Vanilla JavaScript**: Frontend interactivity
+
+## Configuration & Environment
+
+### Environment Variables
+- `TOGETHER_API_KEY`: API key for Together AI service
+- `HUGGINGFACE_API_KEY`: API key for Hugging Face services
+
+### System Requirements
+- **Python**: 3.8+
+- **Memory**: 4GB+ RAM recommended
+- **Storage**: Sufficient space for document storage and FAISS index
+- **Network**: Internet connection for AI API calls
+
+## Project Structure
+
+```
+smart-chart-2/
+├── app/
+│   ├── main.py                 # FastAPI application entry point
+│   ├── models/
+│   │   └── schemas.py          # Pydantic models and data structures
+│   ├── services/
+│   │   ├── ai_service.py       # AI/LLM integration service
+│   │   ├── document_processor.py # Document parsing and chunking
+│   │   ├── rag_service.py      # RAG system implementation
+│   │   └── web_scraper.py      # Web content extraction
+│   └── utils/
+│       └── config.py           # Application configuration
+├── frontend/
+│   └── templates/
+│       └── index.html          # Main web interface
+├── data/                       # FAISS index storage
+├── requirements.txt            # Python dependencies
+└── test.py                     # API testing script
+```
+
+## Future Enhancements
+
+### Planned Features
+- **Multi-language Support**: Expand beyond English content
+- **Advanced Analytics**: Document insights and usage statistics
+- **Collaborative Features**: Multi-user document sharing
+- **API Rate Limiting**: Enhanced security and usage controls
+- **Offline Mode**: Local model support for privacy
+- **Advanced Search**: Boolean queries and filters
+
+### Technical Improvements
+- **Model Fine-tuning**: Custom model training for domain-specific content
+- **Caching Layer**: Response caching for improved performance
+- **Batch Processing**: Bulk document upload and processing
+- **Real-time Collaboration**: WebSocket-based multi-user chat
+
+## Conclusion
+
+Smart Chart V2 represents a comprehensive solution for document and web content interaction, combining modern AI capabilities with user-friendly interfaces. The system's RAG architecture ensures accurate, context-aware responses while maintaining strict adherence to source material. With support for diverse document types and web content, it serves as a versatile tool for information extraction, analysis, and knowledge discovery across various domains and use cases.

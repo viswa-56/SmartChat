@@ -1,0 +1,622 @@
+<!-- frontend/templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Chat V2</title>
+    <link rel="icon" href="/static/icons8-message-bot-32.png" type="image/png" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- <style>
+      .chat-container {
+        height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        padding: 15px;
+        background-color: #f8f9fa;
+      }
+      .message {
+        margin-bottom: 15px;
+      }
+      .user-message {
+        text-align: right;
+      }
+      .bot-message {
+        text-align: left;
+      }
+      .sources {
+        font-size: 0.8em;
+        color: #666;
+        margin-top: 5px;
+      }
+      .source-badge {
+        margin-right: 5px;
+        margin-bottom: 2px;
+      }
+      .url-input {
+        border-radius: 0.375rem 0 0 0.375rem;
+      }
+      .url-button {
+        border-radius: 0 0.375rem 0.375rem 0;
+      }
+      .stats-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+      .clear-btn {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        border: none;
+      }
+      .clear-btn:hover {
+        background: linear-gradient(135deg, #ff5252 0%, #d32f2f 100%);
+      }
+    </style> -->
+    <style>
+      body {
+        background-color: #0f172a;
+        color: #e2e8f0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      h1 {
+        color: #f1f5f9;
+      }
+
+      /* Cards */
+      .card {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      .card-header {
+        background: transparent !important;
+        border-bottom: 1px solid #334155;
+        font-weight: 600;
+      }
+
+      /* Chat container */
+      .chat-container {
+        height: 420px;
+        overflow-y: auto;
+        border-radius: 10px;
+        padding: 15px;
+        background: #020617;
+        border: 1px solid #334155;
+      }
+
+      /* Messages */
+      .message {
+        margin-bottom: 12px;
+        display: flex;
+      }
+
+      .user-message {
+        justify-content: flex-end;
+      }
+
+      .bot-message {
+        justify-content: flex-start;
+      }
+
+      .alert {
+        border-radius: 12px;
+        padding: 10px 14px;
+        max-width: 75%;
+        font-size: 0.95rem;
+      }
+
+      /* User bubble */
+      .alert-primary {
+        background: linear-gradient(135deg, #3b82f6, #6366f1);
+        border: none;
+        color: white;
+      }
+
+      /* Bot bubble */
+      .alert-secondary {
+        background: #1e293b;
+        border: 1px solid #334155;
+        color: #e2e8f0;
+      }
+
+      /* Inputs */
+      .form-control {
+        background: #020617;
+        border: 1px solid #334155;
+        color: #e2e8f0;
+      }
+
+      .form-control:focus {
+        background: #020617;
+        color: #fff;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 0.15rem rgba(99, 102, 241, 0.25);
+      }
+
+      /* Buttons */
+      .btn {
+        border-radius: 8px;
+        font-weight: 500;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #3b82f6, #6366f1);
+        border: none;
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, #10b981, #059669);
+        border: none;
+      }
+
+      .btn-info {
+        background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+        border: none;
+      }
+
+      .clear-btn {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        border: none;
+      }
+
+      /* Hover effects */
+      .btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      /* Source badges */
+      .sources {
+        font-size: 0.75em;
+        margin-top: 6px;
+        color: #94a3b8;
+      }
+
+      .source-badge {
+        margin-right: 5px;
+        margin-top: 4px;
+        border-radius: 6px;
+      }
+
+      /* Scrollbar (modern look) */
+      .chat-container::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .chat-container::-webkit-scrollbar-thumb {
+        background: #475569;
+        border-radius: 10px;
+      }
+
+      /* Stats card */
+      .stats-card {
+        background: linear-gradient(135deg, #1e293b, #0f172a);
+      }
+
+      .message {
+        animation: fadeIn 0.25s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid mt-3">
+      <h1 class="text-center mb-4">
+        <i class="fas fa-comments"></i> Chat with Documents & Web
+      </h1>
+
+      <!-- Control Panel -->
+      <div class="row mb-4">
+        <!-- File Upload -->
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+              <h5><i class="fas fa-upload"></i> Upload Documents</h5>
+            </div>
+            <div class="card-body">
+              <input
+                type="file"
+                id="fileInput"
+                class="form-control mb-2"
+                accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,.md,.markdown,.pptx,.ppt,.html,.htm" 
+                multiple
+              />
+              <button id="uploadBtn" class="btn btn-primary w-100">
+                <i class="fas fa-cloud-upload-alt"></i> Upload Files
+              </button>
+              <div id="uploadStatus" class="mt-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Website Link -->
+        <div class="col-md-4">
+          <div class="card h-100">
+            <div class="card-header bg-success text-white">
+              <h5><i class="fas fa-link"></i> Process Website</h5>
+            </div>
+            <div class="card-body">
+              <div class="input-group mb-2">
+                <input
+                  type="url"
+                  id="urlInput"
+                  class="form-control url-input"
+                  placeholder="https://example.com/article"
+                />
+                <button id="processUrlBtn" class="btn btn-success url-button">
+                  <i class="fas fa-globe"></i> Process
+                </button>
+              </div>
+              <div id="urlStatus" class="mt-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Status & Controls -->
+        <div class="col-md-4">
+          <div class="card h-100 stats-card">
+            <div class="card-header">
+              <h5><i class="fas fa-info-circle"></i> System Status</h5>
+            </div>
+            <div class="card-body">
+              <div id="systemStatus" class="mb-3">Loading...</div>
+              <button
+                id="clearContextBtn"
+                class="btn btn-danger clear-btn w-100"
+              >
+                <i class="fas fa-trash-alt"></i> Clear All Context
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Section -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-info text-white">
+              <h5><i class="fas fa-comments"></i> Chat Interface</h5>
+            </div>
+            <div class="card-body">
+              <div id="chatContainer" class="chat-container mb-3"></div>
+              <div class="input-group mt-2"> 
+                <!-- // mt-2 was not there -->
+                <input
+                  type="text"
+                  id="queryInput"
+                  class="form-control rounded-start"
+                  placeholder="Ask a question about your documents or websites..."
+                />
+                <button id="sendBtn" class="btn btn-info rounded-end">
+                  <i class="fas fa-paper-plane"></i> Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("Script loaded and DOM fully parsed");
+
+        // File upload functionality
+        // document
+        //   .getElementById("uploadBtn")
+        // const uploadBtn = document.getElementById("uploadBtn");
+        // console.log(uploadBtn); 
+
+          document.body.addEventListener('click', async function(event) {
+                if (event.target && event.target.id === 'uploadBtn') {
+                    console.log("Upload button clicked");
+                    // .addEventListener("click", async () => {
+            // console.log('Upload button clicked');
+            const fileInput = document.getElementById("fileInput");
+            const files = fileInput.files;
+
+            if (files.length === 0) {
+              alert("Please select files to upload");
+              return;
+            }
+
+            const uploadStatus = document.getElementById("uploadStatus");
+            uploadStatus.innerHTML =
+              '<div class="text-info"><i class="fas fa-spinner fa-spin"></i> Uploading...</div>';
+
+            for (let file of files) {
+              const formData = new FormData();
+              formData.append("file", file);
+
+              try {
+                const response = await fetch("/upload", {
+                  method: "POST",
+                  body: formData,
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                  uploadStatus.innerHTML += `<div class="text-success"><i class="fas fa-check"></i> ${result.message}</div>`;
+                } else {
+                  uploadStatus.innerHTML += `<div class="text-danger"><i class="fas fa-times"></i> Error: ${result.detail}</div>`;
+                }
+              } catch (error) {
+                uploadStatus.innerHTML += `<div class="text-danger"><i class="fas fa-times"></i> Error uploading ${file.name}</div>`;
+              }
+            }
+
+            fileInput.value = "";
+            updateSystemStatus();
+                }});
+
+        // URL processing functionality
+        document
+          .getElementById("processUrlBtn")
+          .addEventListener("click", async () => {
+            const urlInput = document.getElementById("urlInput");
+            const url = urlInput.value.trim();
+
+            if (!url) {
+              alert("Please enter a URL");
+              return;
+            }
+
+            const urlStatus = document.getElementById("urlStatus");
+            urlStatus.innerHTML =
+              '<div class="text-info"><i class="fas fa-spinner fa-spin"></i> Processing website...</div>';
+
+            try {
+              const response = await fetch("/process-link", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ url: url }),
+              });
+
+              const result = await response.json();
+
+              if (response.ok) {
+                urlStatus.innerHTML = `<div class="text-success"><i class="fas fa-check"></i> ${result.message}</div>`;
+                urlInput.value = "";
+              } else {
+                urlStatus.innerHTML = `<div class="text-danger"><i class="fas fa-times"></i> Error: ${result.detail}</div>`;
+              }
+            } catch (error) {
+              urlStatus.innerHTML = `<div class="text-danger"><i class="fas fa-times"></i> Error processing URL</div>`;
+            }
+
+            updateSystemStatus();
+          });
+
+        // Clear context functionality
+        document
+          .getElementById("clearContextBtn")
+          .addEventListener("click", async () => {
+            if (
+              !confirm(
+                "Are you sure you want to clear all documents and context? This action cannot be undone."
+              )
+            ) {
+              return;
+            }
+
+            try {
+              const response = await fetch("/clear-context", {
+                method: "POST",
+              });
+
+              const result = await response.json();
+
+              if (response.ok) {
+                alert(
+                  `✅ ${result.message}\n📊 ${result.documents_cleared} documents cleared`
+                );
+
+                // Clear chat container
+                document.getElementById("chatContainer").innerHTML = "";
+
+                // Clear status displays
+                document.getElementById("uploadStatus").innerHTML = "";
+                document.getElementById("urlStatus").innerHTML = "";
+              } else {
+                alert(`❌ Error: ${result.detail}`);
+              }
+            } catch (error) {
+              alert("❌ Error clearing context");
+            }
+
+            updateSystemStatus();
+          });
+
+        // Chat functionality
+        document.getElementById("sendBtn").addEventListener("click", sendQuery);
+        document
+          .getElementById("queryInput")
+          .addEventListener("keypress", (e) => {
+            if (e.key === "Enter") sendQuery();
+          });
+
+        async function sendQuery() {
+          const queryInput = document.getElementById("queryInput");
+          const query = queryInput.value.trim();
+
+          if (!query) return;
+
+          const chatContainer = document.getElementById("chatContainer");
+
+          // Add user message
+          addMessage(query, "user");
+          queryInput.value = "";
+
+          // Add loading message
+          const loadingDiv = document.createElement("div");
+          loadingDiv.className = "message bot-message";
+          loadingDiv.innerHTML =
+            '<div class="alert alert-info"><i class="fas fa-spinner fa-spin"></i> Thinking...</div>';
+          chatContainer.appendChild(loadingDiv);
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+
+          try {
+            const response = await fetch("/query", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ query: query }),
+            });
+
+            const result = await response.json();
+
+            // Remove loading message
+            chatContainer.removeChild(loadingDiv);
+
+            if (response.ok) {
+              addMessage(
+                result.answer,
+                "bot",
+                result.sources,
+                result.confidence_score
+              );
+            } else {
+              addMessage("Error: " + result.detail, "bot");
+            }
+          } catch (error) {
+            chatContainer.removeChild(loadingDiv);
+            addMessage("Error: Unable to process your query", "bot");
+          }
+        }
+        // Add this function to show supported formats
+        function showSupportedFormats() {
+          const formats = [
+            { ext: "PDF", icon: "fas fa-file-pdf", color: "text-danger" },
+            { ext: "DOCX", icon: "fas fa-file-word", color: "text-primary" },
+            { ext: "TXT", icon: "fas fa-file-alt", color: "text-secondary" },
+            { ext: "MD", icon: "fab fa-markdown", color: "text-info" },
+            {
+              ext: "PPTX",
+              icon: "fas fa-file-powerpoint",
+              color: "text-warning",
+            },
+            { ext: "HTML", icon: "fas fa-file-code", color: "text-success" },
+            { ext: "Images", icon: "fas fa-file-image", color: "text-info" },
+          ];
+
+          return formats
+            .map(
+              (f) =>
+                `<span class="${f.color}"><i class="${f.icon}"></i> ${f.ext}</span>`
+            )
+            .join(" • ");
+        }
+
+        // Update the card body in the upload section
+        document.querySelector(".card-body").innerHTML += `
+              <div class="mt-2">
+                  <small class="text-muted">
+                      <strong>Supported formats:</strong><br>
+                      ${showSupportedFormats()}
+                  </small>
+              </div>
+          `;
+
+        function addMessage(text, sender, sources = [], confidence = null) {
+          const chatContainer = document.getElementById("chatContainer");
+          const messageDiv = document.createElement("div");
+          messageDiv.className = `message ${sender}-message`;
+
+          let html = `<div class="alert alert-${
+            sender === "user" ? "primary" : "secondary"
+          }">${text}</div>`;
+
+          if (sources && sources.length > 0) {
+            html += '<div class="sources">Sources: ';
+            sources.forEach((source, index) => {
+              const sourceType = source.source_type || "document";
+              const badgeClass =
+                sourceType === "webpage" ? "bg-success" : "bg-info";
+              const icon =
+                sourceType === "webpage" ? "fas fa-globe" : "fas fa-file";
+
+              const displayName = source.url
+                ? new URL(source.url).hostname
+                : source.filename;
+
+              html += `<span class="badge ${badgeClass} source-badge">
+                          <i class="${icon}"></i> ${displayName} (${Math.round(
+                source.confidence * 100
+              )}%)
+                      </span>`;
+            });
+            html += "</div>";
+          }
+
+          if (confidence !== null) {
+            html += `<div class="sources">
+                      <i class="fas fa-chart-line"></i> Confidence: ${Math.round(
+                        confidence * 100
+                      )}%
+                  </div>`;
+          }
+
+          messageDiv.innerHTML = html;
+          chatContainer.appendChild(messageDiv);
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        async function updateSystemStatus() {
+          try {
+            const response = await fetch("/context-stats");
+            const stats = await response.json();
+
+            let statusHtml = `
+                      <div><i class="fas fa-database"></i> <strong>Total Chunks:</strong> ${stats.total_chunks}</div>
+                      <div><i class="fas fa-folder"></i> <strong>Sources:</strong> ${stats.unique_sources}</div>
+                  `;
+
+            if (Object.keys(stats.document_types).length > 0) {
+              statusHtml +=
+                '<div><i class="fas fa-chart-pie"></i> <strong>Types:</strong></div>';
+              for (const [type, count] of Object.entries(stats.document_types)) {
+                const icon = type === "webpage" ? "fas fa-globe" : "fas fa-file";
+                statusHtml += `<div class="ms-2"><i class="${icon}"></i> ${type}: ${count}</div>`;
+              }
+            }
+
+            document.getElementById("systemStatus").innerHTML = statusHtml;
+          } catch (error) {
+            document.getElementById("systemStatus").innerHTML =
+              '<div class="text-warning"><i class="fas fa-exclamation-triangle"></i> Status: Error</div>';
+          }
+        }
+
+        // Initial status update
+        updateSystemStatus();
+
+        // Auto-refresh status every 30 seconds
+        setInterval(updateSystemStatus, 30000);
+      });
+    </script>
+  </body>
+</html>
